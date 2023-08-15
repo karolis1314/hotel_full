@@ -48,6 +48,7 @@ public class CheckInGuestGUI {
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         buttonPanel.add(cancelButton);
         buttonPanel.add(checkInButton);
 
@@ -56,6 +57,7 @@ public class CheckInGuestGUI {
         dialog.add(buttonPanel, BorderLayout.SOUTH);
 
         populateGuestsTable();
+        dialog.setLocationRelativeTo(parentFrame);
         dialog.setVisible(true);
     }
 
