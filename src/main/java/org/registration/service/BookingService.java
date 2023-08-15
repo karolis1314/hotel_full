@@ -24,24 +24,23 @@ public class BookingService {
 
     public void checkin(String lastName) throws ApplicationException {
         var availableRooms = roomService.getAllAvailableRooms().stream().findAny().orElse(null);
-
         if (availableRooms != null) {
             var guest = guestService.getGuestByName(lastName);
             try (Connection connection = JdbcConnection.connect()) {
                 if (connection != null) {
-                    String checkExistingBookingQuery = "SELECT COUNT(*) FROM Booking WHERE guest_id = ? AND checkedOut IS NULL";
+                    String checkExistingBookingQuery = "SELECT COUNT(*) FROM room WHERE guest_id = ? AND available = false";
                     try (PreparedStatement checkStatement = connection.prepareStatement(checkExistingBookingQuery)) {
                         checkStatement.setLong(1, guest.getId());
                         try (ResultSet resultSet = checkStatement.executeQuery()) {
-                            if (resultSet.next() && resultSet.getInt(1) == 0) {
+                            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                                throw new ApplicationException("Guest already has an active booking.");
+                            } else {
                                 String insertQuery = "INSERT INTO Booking (guest_id, room_id) VALUES (?, ?)";
                                 try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
                                     insertStatement.setLong(1, guest.getId());
                                     insertStatement.setLong(2, availableRooms.getId());
                                     insertStatement.executeUpdate();
                                 }
-                            } else {
-                                throw new ApplicationException("Guest already has an active booking.");
                             }
                         }
                     }
@@ -50,6 +49,8 @@ public class BookingService {
                 throw new ApplicationException("Error registering guest into a hotel");
             }
             roomService.setRoomToBeTaken(availableRooms.getId(), guest);
+        } else {
+            throw new ApplicationException("No available rooms found");
         }
     }
 

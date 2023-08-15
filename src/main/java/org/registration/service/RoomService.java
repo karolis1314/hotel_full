@@ -47,7 +47,7 @@ public class RoomService {
         List<Room> rooms = new ArrayList<>();
         try (Connection connection = JdbcConnection.connect();
              ResultSet resultSet = getResultsFromQuery(
-                     "SELECT r.id AS room_id, g.firstName, g.lastName FROM booking b INNER JOIN room r ON b.room_id = r.id INNER JOIN guest g ON b.guest_id = g.id WHERE r.available = false;", connection)) {
+                     "SELECT r.id AS room_id, g.firstName, g.lastName FROM room r INNER JOIN guest g ON r.guest_id = g.id WHERE r.available = false AND r.guest_id IS NOT NULL;", connection)) {
             while (resultSet.next()) {
                 rooms.add(RoomMapper.fromResultSetToRoomWithGuest(
                         resultSet.getLong("room_id"),

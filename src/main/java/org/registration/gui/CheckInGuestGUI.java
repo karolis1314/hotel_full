@@ -1,15 +1,11 @@
 package org.registration.gui;
 
-import org.registration.domain.entity.Guest;
-import org.registration.exception.ApplicationException;
 import org.registration.service.BookingService;
 import org.registration.service.GuestService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.sql.SQLException;
-import java.util.List;
 
 public class CheckInGuestGUI {
 
