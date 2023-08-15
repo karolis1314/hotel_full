@@ -4,8 +4,6 @@ import org.registration.service.GuestService;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class RegisterGuestGUI {
 
@@ -37,23 +35,20 @@ public class RegisterGuestGUI {
 
         cancelButton.addActionListener(e -> dialog.dispose());
 
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String firstName = firstNameField.getText();
-                String lastName = lastNameField.getText();
+        saveButton.addActionListener(e -> {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
 
-                if (!firstName.isEmpty() && !lastName.isEmpty()) {
-                    try {
-                        guestService.createGuest(firstName, lastName);
-                        JOptionPane.showMessageDialog(dialog, "Guest registered successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        dialog.dispose();
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(dialog, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(dialog, "Please fill in both first name and last name", "Error", JOptionPane.ERROR_MESSAGE);
+            if (!firstName.isEmpty() && !lastName.isEmpty()) {
+                try {
+                    guestService.createGuest(firstName, lastName);
+                    JOptionPane.showMessageDialog(dialog, "Guest registered successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    dialog.dispose();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(dialog, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
+            } else {
+                JOptionPane.showMessageDialog(dialog, "Please fill in both first name and last name", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
